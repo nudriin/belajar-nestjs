@@ -15,6 +15,28 @@ import { Request, Response } from 'express';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
+    // ! COOKIE ============================================================================================================
+    @Get('/set-cookie')
+    @Header('Content-Type', 'application/json')
+    // cookie diambil dari query parameter
+    setCookie(@Query('value') value: string, @Res() response: Response) {
+        if (value) {
+            response.cookie('cook', value); // cookie di set
+            response.status(200).json({
+                message: 'Set cookie success',
+            }); // kemudian datanya pesan suksesnya di return ke response
+        } else {
+            response.status(400).json({
+                errors: 'Value is required',
+            });
+        }
+    }
+
+    @Get('get-cookie')
+    getCookie(@Req() request: Request): string {
+        return request.cookies['cook']; // mengirimkan kembali request cookienya
+    }
+
     // ! ASYNCHRONOUS ============================================================================================================
     // cara membuat method async adalah cukup dengan menambah kan ka kunci async pada method
     // dan return nya adalah Promise<T>
