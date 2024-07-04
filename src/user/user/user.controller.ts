@@ -15,6 +15,16 @@ import { Request, Response } from 'express';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
+    // ! VIEWS
+    @Get('/view/hello')
+    viewHello(@Query('name') name: string, @Res() response: Response) {
+        // Merender templatenya
+        response.render('index.html', {
+            title: 'View Engine',
+            name: name,
+        });
+    }
+
     // ! COOKIE ============================================================================================================
     @Get('/set-cookie')
     @Header('Content-Type', 'application/json')
