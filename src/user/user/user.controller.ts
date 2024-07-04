@@ -15,7 +15,23 @@ import { Request, Response } from 'express';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
-    // ! RESPONSE
+    // ! ASYNCHRONOUS ============================================================================================================
+    // cara membuat method async adalah cukup dengan menambah kan ka kunci async pada method
+    // dan return nya adalah Promise<T>
+    @Get('/async')
+    @Header('Content-Type', 'application/json')
+    @HttpCode(200)
+    async asyncMethod(
+        @Query('name') name: string,
+        @Query('age') age: number,
+    ): Promise<string> {
+        return JSON.stringify({
+            name: name,
+            age: age,
+        });
+    }
+
+    // ! RESPONSE ============================================================================================================
     // Membuat response menggunakan express.Response object
     @Get('/sample-res')
     responseExpress(@Res() res: Response) {
@@ -57,7 +73,7 @@ export class UserController {
         };
     }
 
-    // ! API ROUTE
+    // ! API ROUTE ============================================================================================================
     @Post() // * karena path nya tidak kita tuliskan maka akan mengikuti path controller
     registerUser(): string {
         return 'POST';
@@ -68,7 +84,7 @@ export class UserController {
         return 'GET';
     }
 
-    // ! REQUEST
+    // ! REQUEST ============================================================================================================
     // mengambil request parameter menggunakan object Request dari express
     @Get('/:nurdinId') // path yang dapat menerima request param
     getUserById(@Req() request: Request): string {
