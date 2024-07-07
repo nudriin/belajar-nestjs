@@ -4,6 +4,7 @@ import {
     Header,
     HttpCode,
     HttpRedirectResponse,
+    Inject,
     Param,
     Post,
     Query,
@@ -14,6 +15,8 @@ import {
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
 import { Connection } from '../connection/connection';
+import { MailService } from '../mail/mail.service';
+import { UserRepository } from '../user-repository/user-repository';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -28,9 +31,33 @@ export class UserController {
     constructor(
         private service: UserService,
         private connection: Connection,
+        private mailService: MailService,
+        @Inject('EmailService') private emailService: MailService, // menggunakan alias provider
+        private userRepository: UserRepository,
     ) {} // * <---- REKOMENDASINYAA
 
     // ! PROVIDER(DEPENDENCIES INJECTABLE) ================================================================
+
+    @Get('/with-alias-provider')
+    @HttpCode(200)
+    aliasProvider(): string {
+        // memanggil value providernya
+        return this.emailService.send();
+    }
+
+    @Get('/with-factory-provider')
+    @HttpCode(200)
+    factoryProvider(): string {
+        // memanggil value providernya
+        return this.userRepository.save();
+    }
+
+    @Get('/with-value-provider')
+    @HttpCode(200)
+    valueProvider(): string {
+        // memanggil value providernya
+        return this.mailService.send();
+    }
 
     @Get('/with-class-provider')
     @HttpCode(200)

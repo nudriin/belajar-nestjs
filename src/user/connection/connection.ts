@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+// ! CLASS PROVIDER
 @Injectable()
 // Buat class interfacenya
 export class Connection {
