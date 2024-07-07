@@ -4,8 +4,6 @@ import {
     Header,
     HttpCode,
     HttpRedirectResponse,
-    Inject,
-    Optional,
     Param,
     Post,
     Query,
@@ -15,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
+import { Connection } from '../connection/connection';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -22,12 +21,24 @@ export class UserController {
     // cukup menggunakan constructor ini saja user service akan dapat langsung dipanggil
     // dan objectnya akan dibuatkan otomatis oleh nest js
     // dapat diakses dengan kata kunci this.service
-    @Inject() // menggunakan inject untuk dependencies inejction melalui properties
-    @Optional() // provider ini dianggap optional, jadi jika providernya tidak tersedia maka tidak error
-    private service: UserService; // memanggil
-    //* constructor(private service: UserService) {} // <---- REKOMENDASINYAA
 
-    // ! PROVIDER(DEPENDENCIES INJECTABLE)
+    // @Inject() // menggunakan inject untuk dependencies inejction melalui properties
+    // @Optional() // provider ini dianggap optional, jadi jika providernya tidak tersedia maka tidak error
+    // private service: UserService; // memanggil
+    constructor(
+        private service: UserService,
+        private connection: Connection,
+    ) {} // * <---- REKOMENDASINYAA
+
+    // ! PROVIDER(DEPENDENCIES INJECTABLE) ================================================================
+
+    @Get('/with-class-provider')
+    @HttpCode(200)
+    connectionProvider(): string {
+        // memanggil class providernya
+        return this.connection.getName();
+    }
+
     @Get('/with-provider')
     @Header('Content-Type', 'application/json')
     @HttpCode(200)
@@ -38,7 +49,8 @@ export class UserController {
         // memanggil servicenya
         return this.service.getNameAndAge(name, age);
     }
-    // ! VIEWS
+
+    // ! VIEWS ==============================================================================================================
     @Get('/view/hello')
     viewHello(@Query('name') name: string, @Res() response: Response) {
         // Merender templatenya
