@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import * as httpMock from 'node-mocks-http'; // install mock
+import { UserService } from './user.service';
 
 describe('UserController', () => {
     let controller: UserController;
@@ -8,6 +9,7 @@ describe('UserController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [UserController],
+            providers: [UserService], // ! panggil provider saat menggunakan provider UserService
         }).compile();
 
         controller = module.get<UserController>(UserController);
@@ -42,6 +44,16 @@ describe('UserController', () => {
         expect(response._getRenderData()).toEqual({
             title: 'View Engine',
             name: 'Nurdin',
+        });
+    });
+
+    it('should support dependencies injection', async () => {
+        // ! Jangan lupa tambahkan providers di beforeEach
+        const response = await controller.withService('Nurdin', 20);
+        console.log(response);
+        expect(JSON.parse(response)).toEqual({
+            name: 'Nurdin',
+            age: 20,
         });
     });
 });

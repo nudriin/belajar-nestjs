@@ -4,6 +4,8 @@ import {
     Header,
     HttpCode,
     HttpRedirectResponse,
+    Inject,
+    Optional,
     Param,
     Post,
     Query,
@@ -12,9 +14,30 @@ import {
     Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { UserService } from './user.service';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
+    // Memanggil user service
+    // cukup menggunakan constructor ini saja user service akan dapat langsung dipanggil
+    // dan objectnya akan dibuatkan otomatis oleh nest js
+    // dapat diakses dengan kata kunci this.service
+    @Inject() // menggunakan inject untuk dependencies inejction melalui properties
+    @Optional() // provider ini dianggap optional, jadi jika providernya tidak tersedia maka tidak error
+    private service: UserService; // memanggil
+    //* constructor(private service: UserService) {} // <---- REKOMENDASINYAA
+
+    // ! PROVIDER(DEPENDENCIES INJECTABLE)
+    @Get('/with-provider')
+    @Header('Content-Type', 'application/json')
+    @HttpCode(200)
+    async withService(
+        @Query('name') name: string,
+        @Query('age') age: number,
+    ): Promise<string> {
+        // memanggil servicenya
+        return this.service.getNameAndAge(name, age);
+    }
     // ! VIEWS
     @Get('/view/hello')
     viewHello(@Query('name') name: string, @Res() response: Response) {

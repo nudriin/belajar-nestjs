@@ -21,4 +21,19 @@ describe('AppController (e2e)', () => {
             .expect(200)
             .expect('Hello World!');
     });
+
+    it('should get asyncMethod', async () => {
+        const response = await request(app.getHttpServer())
+            .get('/api/users/async')
+            .query({
+                name: 'Nurdin',
+                age: 20,
+            });
+
+        console.log(response.body);
+        expect(response.body).toEqual({
+            name: 'Nurdin',
+            age: 20,
+        });
+    });
 });
