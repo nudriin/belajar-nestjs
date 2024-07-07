@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
+import * as httpMock from 'node-mocks-http'; // install mock
 
 describe('UserController', () => {
     let controller: UserController;
@@ -25,5 +26,22 @@ describe('UserController', () => {
             age: 20,
         });
         console.log(data);
+    });
+
+    // membuat mock
+    it('should support mocks response', () => {
+        const response = httpMock.createResponse();
+
+        // Menggunakan mock response pada viewHello
+        controller.viewHello('Nurdin', response);
+
+        console.log(response._getRenderData());
+        console.log(response._getRenderView());
+
+        expect(response._getRenderView()).toBe('index.html');
+        expect(response._getRenderData()).toEqual({
+            title: 'View Engine',
+            name: 'Nurdin',
+        });
     });
 });
