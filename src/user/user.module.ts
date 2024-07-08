@@ -11,10 +11,16 @@ import {
     createUserRepository,
     UserRepository,
 } from './user-repository/user-repository';
+import { UserRepo } from './user-repo/user-repo';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
+    imports: [PrismaModule],
     controllers: [UserController],
     providers: [
+        PrismaService,
+        UserRepo,
         UserService,
         // ! Menggunakan class providernya pada User module
         {
@@ -43,6 +49,6 @@ import {
         },
     ],
     // Kita akan mengeksport provider (Sharing provider)
-    exports: [UserService], // user service akan kita export, dan dapat di gunakan oleh modul lainnya
+    exports: [UserService, UserRepo], // user service akan kita export, dan dapat di gunakan oleh modul lainnya
 })
 export class UserModule {}

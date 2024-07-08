@@ -6,6 +6,7 @@ import { ModulReferenceModule } from './modul-reference/modul-reference.module';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigureModule } from './configure/configure.module';
 import { SharingProviderModule } from './sharing-provider/sharing-provider.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { SharingProviderModule } from './sharing-provider/sharing-provider.modul
         ConfigModule,
         ConfigureModule,
         SharingProviderModule,
+        PrismaModule,
     ],
     controllers: [AppController],
     providers: [AppService],

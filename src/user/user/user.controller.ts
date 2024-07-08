@@ -1,4 +1,5 @@
 import {
+    Body,
     Controller,
     Get,
     Header,
@@ -17,6 +18,7 @@ import { UserService } from './user.service';
 import { Connection } from '../connection/connection';
 import { MailService } from '../mail/mail.service';
 import { UserRepository } from '../user-repository/user-repository';
+import { UserRepo } from '../user-repo/user-repo';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -34,10 +36,38 @@ export class UserController {
         private mailService: MailService,
         @Inject('EmailService') private emailService: MailService, // menggunakan alias provider
         private userRepository: UserRepository,
+        private userRepo: UserRepo,
     ) {} // * <---- REKOMENDASINYAA
 
-    // ! PROVIDER(DEPENDENCIES INJECTABLE) ================================================================
+    // ! DATABASE PRISMA
+    @Post()
+    @Header('Content-Type', 'application/json')
+    async registerUser(
+        @Body('name') name: string,
+        @Body('age') age: number,
+    ): Promise<string> {
+        // const result = await this.service.saveUser(name, age);
+        const result = await this.userRepo.save(name, age);
+        return JSON.stringify(result);
+    }
 
+    @Get('/by-name/:name')
+    @Header('Content-Type', 'application/json')
+    async getUserByName(@Param('name') name: string): Promise<string> {
+        // const result = await this.service.saveUser(name, age);
+        const result = await this.userRepo.findByName(name);
+        return JSON.stringify(result);
+    }
+
+    @Get('/all')
+    @Header('Content-Type', 'application/json')
+    async getAllUser(): Promise<string> {
+        // const result = await this.service.saveUser(name, age);
+        const result = await this.userRepo.findAll();
+        return JSON.stringify(result);
+    }
+
+    // ! PROVIDER(DEPENDENCIES INJECTABLE) ================================================================
     @Get('/with-alias-provider')
     @HttpCode(200)
     aliasProvider(): string {
@@ -168,8 +198,8 @@ export class UserController {
     }
 
     // ! API ROUTE ============================================================================================================
-    @Post() // * karena path nya tidak kita tuliskan maka akan mengikuti path controller
-    registerUser(): string {
+    @Post('/add') // * karena path nya tidak kita tuliskan maka akan mengikuti path controller
+    postTest(): string {
         return 'POST';
     }
 
