@@ -42,5 +42,7 @@ import {
             useExisting: MailService, // menggunakan object provider yang sama dengan MailService tapi namanya berbeda
         },
     ],
+    // Kita akan mengeksport provider (Sharing provider)
+    exports: [UserService], // user service akan kita export, dan dapat di gunakan oleh modul lainnya
 })
 export class UserModule {}
