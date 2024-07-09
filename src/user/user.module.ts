@@ -13,10 +13,8 @@ import {
 } from './user-repository/user-repository';
 import { UserRepo } from './user-repo/user-repo';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
-    imports: [PrismaModule],
     controllers: [UserController],
     providers: [
         PrismaService,
