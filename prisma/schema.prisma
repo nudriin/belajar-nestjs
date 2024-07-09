@@ -20,3 +20,11 @@ model User {
 
   @@map("users")
 }
+
+model Product {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(255)
+  price Int
+
+  @@map("products")
+}
