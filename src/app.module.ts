@@ -17,9 +17,9 @@ import { ProductModule } from './product/product.module';
 import { ValidationModule } from './validation/validation.module';
 import * as winston from 'winston'; // import winstonnya
 import { LogMiddleware } from './log/log.middleware';
-import { UserController } from './user/user/user.controller';
-import { ProductController } from './product/product.controller';
-import { SharingProviderController } from './sharing-provider/sharing-provider.controller';
+// import { UserController } from './user/user/user.controller';
+// import { ProductController } from './product/product.controller';
+// import { SharingProviderController } from './sharing-provider/sharing-provider.controller';
 
 @Module({
     imports: [
