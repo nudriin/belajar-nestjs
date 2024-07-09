@@ -12,6 +12,7 @@ import {
     Redirect,
     Req,
     Res,
+    UseFilters,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
@@ -19,6 +20,9 @@ import { Connection } from '../connection/connection';
 import { MailService } from '../mail/mail.service';
 import { UserRepository } from '../user-repository/user-repository';
 import { UserRepo } from '../user-repo/user-repo';
+import { ValidationFilter } from 'src/validation/validation.filter';
+import { ValidationPipe } from 'src/validation/validation.pipe';
+import { LoginRequest, loginRequestValidation } from 'src/model/login.model';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -38,6 +42,18 @@ export class UserController {
         private userRepository: UserRepository,
         private userRepo: UserRepo,
     ) {} // * <---- REKOMENDASINYAA
+
+    // ! CUSTOM PIPE
+    @Post('/login')
+    @Header('Content-Type', 'application/json')
+    @UseFilters(ValidationFilter)
+    // @UsePipes(new ValidationPipe(loginRequestValidation)) //! <== BISA JUGA BEGINI
+    login(
+        // meregiskan pipenya menggunakan ValidationPipe
+        @Body(new ValidationPipe(loginRequestValidation)) request: LoginRequest,
+    ): string {
+        return JSON.stringify(request);
+    }
 
     // ! DATABASE PRISMA
     @Post()

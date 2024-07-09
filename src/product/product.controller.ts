@@ -5,6 +5,8 @@ import {
     Header,
     HttpException,
     Param,
+    ParseFloatPipe,
+    ParseIntPipe,
     Post,
     UseFilters,
 } from '@nestjs/common';
@@ -45,13 +47,12 @@ export class ProductController {
     @Get('/:id')
     @Header('Content-Type', 'application/json')
     @UseFilters(ValidationFilter) // ! menggunakan validation filter untuk errornya
-    async getById(@Param('id') id: number): Promise<string> {
-        // Kita parse, karena pada
-        if (typeof id == 'string') {
-            id = parseInt(id);
-        }
-
-        // ATAU bisa gunakan coerce
+    async getById(
+        // Kita gunakan pipe pada param id nya
+        // bisa juga multiple pipe
+        @Param('id', ParseIntPipe, ParseFloatPipe) id: number,
+    ): Promise<string> {
+        // ATAU bisa gunakan coerce untuk parsing datanya
         const schema = z.coerce.number();
         const result = this.validationService.validate(schema, id);
 
