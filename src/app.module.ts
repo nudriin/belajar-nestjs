@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+    RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -11,6 +16,10 @@ import { WinstonModule } from 'nest-winston';
 import { ProductModule } from './product/product.module';
 import { ValidationModule } from './validation/validation.module';
 import * as winston from 'winston'; // import winstonnya
+import { LogMiddleware } from './log/log.middleware';
+import { UserController } from './user/user/user.controller';
+import { ProductController } from './product/product.controller';
+import { SharingProviderController } from './sharing-provider/sharing-provider.controller';
 
 @Module({
     imports: [
@@ -39,4 +48,21 @@ import * as winston from 'winston'; // import winstonnya
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {}
+// ! Meregiskan middleware menggunakan nest module
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(LogMiddleware).forRoutes({
+            path: '/api/*', // semua yang diawali dengan api akan implementasi middleware ini
+            method: RequestMethod.ALL, // semua request method akan implementasi
+        });
+
+        // ! Bisa juga seperi dibawah ini
+        // consumer
+        //     .apply(LogMiddleware)
+        //     .forRoutes(
+        //         UserController,
+        //         ProductController,
+        //         SharingProviderController,
+        //     );
+    }
+}
