@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as mustache from 'mustache-express';
 import { ConfigService } from '@nestjs/config';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { ValidationFilter } from './validation/validation.filter';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -18,6 +19,9 @@ async function bootstrap() {
     app.set('view engine', 'html');
     app.engine('html', mustache());
     // ! ===== setup view engine =====
+
+    // ! Menjadikan ValidationFilter sebagai global yang akan digunakan di semua controller
+    app.useGlobalFilters(new ValidationFilter());
 
     // ! ===== Mengambil ConfigService menggunakan app ====
     const configService = app.get(ConfigService);
