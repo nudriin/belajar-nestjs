@@ -9,10 +9,13 @@ import { SharingProviderModule } from './sharing-provider/sharing-provider.modul
 import { PrismaModule } from './prisma/prisma.module';
 import { WinstonModule } from 'nest-winston';
 import { ProductModule } from './product/product.module';
+import { ValidationModule } from './validation/validation.module';
 import * as winston from 'winston'; // import winstonnya
 
 @Module({
     imports: [
+        // * Meregistraiskan Validation module
+        ValidationModule.forRoot(true),
         // * Meregistraiskan config module
         ConfigModule.forRoot({
             isGlobal: true,
