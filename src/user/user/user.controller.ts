@@ -25,6 +25,8 @@ import { ValidationFilter } from 'src/validation/validation.filter';
 import { ValidationPipe } from 'src/validation/validation.pipe';
 import { LoginRequest, loginRequestValidation } from 'src/model/login.model';
 import { TimeInterceptor } from '../../time/time.interceptor';
+import { Auth } from 'src/auth/auth.decorator';
+import { User } from '@prisma/client';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -45,6 +47,15 @@ export class UserController {
         private userRepo: UserRepo,
     ) {} // * <---- REKOMENDASINYAA
 
+    // ! CUSTOM DECORATOR
+    @Get('/current')
+    current(@Auth() user: User): Record<string, any> {
+        return {
+            id: user.id,
+            name: user.name,
+            age: user.age,
+        };
+    }
     // ! INTERCEPTOR
     @Get('/interceptor')
     @Header('Content-Type', 'application/json')
