@@ -29,6 +29,7 @@ import { TimeInterceptor } from '../../time/time.interceptor';
 import { Auth } from 'src/auth/auth.decorator';
 import { User } from '@prisma/client';
 import { RoleGuard } from 'src/role/role.guard';
+import { Roles } from 'src/role/roles.decorator';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -51,7 +52,8 @@ export class UserController {
 
     // ! CUSTOM DECORATOR
     @Get('/current')
-    @UseGuards(new RoleGuard(['admin', 'operator']))
+    @UseGuards(RoleGuard)
+    @Roles(['admin', 'operator'])
     current(@Auth() user: User): Record<string, any> {
         return {
             id: user.id,
