@@ -23,6 +23,7 @@ async function bootstrap() {
     // ! Menjadikan ValidationFilter sebagai global yang akan digunakan di semua controller
     app.useGlobalFilters(new ValidationFilter());
 
+    app.enableShutdownHooks();
     // ! ===== Mengambil ConfigService menggunakan app ====
     const configService = app.get(ConfigService);
     // Menggunakan port yang ada di .env file pada listen app
