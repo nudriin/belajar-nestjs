@@ -13,6 +13,7 @@ import {
     Req,
     Res,
     UseFilters,
+    UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
@@ -23,6 +24,7 @@ import { UserRepo } from '../user-repo/user-repo';
 import { ValidationFilter } from 'src/validation/validation.filter';
 import { ValidationPipe } from 'src/validation/validation.pipe';
 import { LoginRequest, loginRequestValidation } from 'src/model/login.model';
+import { TimeInterceptor } from '../../time/time.interceptor';
 
 @Controller('/api/users') // * membuat path controller nya
 export class UserController {
@@ -42,6 +44,19 @@ export class UserController {
         private userRepository: UserRepository,
         private userRepo: UserRepo,
     ) {} // * <---- REKOMENDASINYAA
+
+    // ! INTERCEPTOR
+    @Get('/interceptor')
+    @Header('Content-Type', 'application/json')
+    @UseInterceptors(TimeInterceptor)
+    withInterceptor(@Query('name') name: string): Record<string, any> {
+        // Response yang kita kirim hanyalah name
+        // Tetapi karena kita menggunakan interceptor Time
+        // maka ada ada prorty timestamp di response
+        return {
+            name: name,
+        };
+    }
 
     // ! CUSTOM PIPE
     @Post('/login')
