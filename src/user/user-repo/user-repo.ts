@@ -30,6 +30,7 @@ export class UserRepo {
                 id: true,
                 name: true,
                 age: true,
+                role: true,
             },
             where: {
                 name: name,
@@ -45,6 +46,7 @@ export class UserRepo {
                 id: true,
                 name: true,
                 age: true,
+                role: true,
             },
         });
 

@@ -14,9 +14,10 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(255)
+  id   Int     @id @default(autoincrement())
+  name String  @db.VarChar(255)
   age  Int
+  role String? @db.VarChar(255)
 
   @@map("users")
 }
